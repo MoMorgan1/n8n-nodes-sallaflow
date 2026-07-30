@@ -28,16 +28,16 @@ official unless n8n grants that status.
 
 ## Requirements
 
-- A self-hosted n8n instance that permits npm community-node installation
+- A compatible n8n workspace where npm Community Nodes installation is enabled
 - Node.js 22.22.0 or newer for development and package validation
 - A Salla store with an active SallaFlow account and app connection
 - A SallaFlow integration key
 - A publicly reachable HTTPS webhook URL for trigger workflows
 
-This community-node package does not provision or include an n8n instance.
-Install it in a compatible n8n environment you control. Any separately
-advertised hosting service is outside this package and governed by its own
-current plan terms.
+This community-node package does not provision or include an n8n workspace or
+subscription. Install it in a compatible workspace where npm Community Nodes
+installation is enabled. Any separately advertised hosting service is outside
+this package and governed by its own current plan terms.
 
 The 0.6.2 release candidate is tested with n8n 2.32.6, which was the current
 stable release when it was prepared, and with the existing hosted compatibility
@@ -47,7 +47,7 @@ to remain on an older n8n release.
 
 ## Installation
 
-Sign in to a self-hosted n8n instance as an Owner or Admin:
+Sign in to a compatible n8n workspace as an Owner or Admin:
 
 1. Open **Settings → Community Nodes → Install**.
 2. Enter the exact npm package name:
@@ -62,7 +62,7 @@ Sign in to a self-hosted n8n instance as an Owner or Admin:
 
 See n8n's
 [community-node installation guide](https://docs.n8n.io/integrations/community-nodes/installation-and-management/gui-installation/)
-for supported self-hosted installation methods.
+for supported Community Nodes installation methods.
 
 The package is not currently available for installation on n8n Cloud. Cloud
 availability depends on completion and approval of n8n's current verification
