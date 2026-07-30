@@ -16,10 +16,10 @@ The integration involves three systems:
 - the SallaFlow backend at `https://api.sallaflow.cloud`
 - Salla's platform and Merchant API
 
-For a self-hosted installation of this package, the operator of the n8n
-instance controls workflow definitions, credentials, users, execution
-history, and retention settings. Any separately advertised hosting service
-has its own applicable privacy terms.
+For this package in a compatible n8n workspace, the workspace operator or
+provider controls workflow definitions, credentials, users, execution history,
+and retention settings. Any separately advertised hosting service has its own
+applicable privacy terms.
 
 ## Action data flow
 

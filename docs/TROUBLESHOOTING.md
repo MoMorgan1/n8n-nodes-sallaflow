@@ -8,7 +8,7 @@ problems.
 Check:
 
 - The package name is exactly `n8n-nodes-sallaflow`.
-- The installation is self-hosted and allows npm community nodes.
+- The n8n workspace is compatible and allows npm Community Nodes installation.
 - You are signed in as an n8n Owner or Admin.
 - The host can reach the npm registry.
 - The n8n deployment's supported Node.js version satisfies this package's
