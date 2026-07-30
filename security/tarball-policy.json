@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "requiredFiles": [
+    "package/package.json",
+    "package/README.md",
+    "package/LICENSE",
+    "package/CHANGELOG.md",
+    "package/dist/credentials/SallaFlowApi.credentials.js",
+    "package/dist/credentials/SallaFlowApi.credentials.d.ts",
+    "package/dist/credentials/icon.svg",
+    "package/dist/credentials/icon.dark.svg",
+    "package/dist/nodes/SallaFlow/SallaFlow.node.js",
+    "package/dist/nodes/SallaFlow/SallaFlow.node.d.ts",
+    "package/dist/nodes/SallaFlow/icon.svg",
+    "package/dist/nodes/SallaFlow/icon.dark.svg",
+    "package/dist/nodes/SallaFlowTrigger/SallaFlowTrigger.node.js",
+    "package/dist/nodes/SallaFlowTrigger/SallaFlowTrigger.node.d.ts",
+    "package/dist/nodes/SallaFlowTrigger/icon.svg",
+    "package/dist/nodes/SallaFlowTrigger/icon.dark.svg"
+  ],
+  "allowedFilePatterns": [
+    "^package/(?:package\\.json|README\\.md|LICENSE|CHANGELOG\\.md)$",
+    "^package/dist/package\\.json$",
+    "^package/dist/credentials/[A-Za-z0-9._-]+\\.(?:js|d\\.ts|js\\.map|d\\.ts\\.map|svg)$",
+    "^package/dist/nodes/[A-Za-z0-9._/-]+\\.(?:js|d\\.ts|js\\.map|d\\.ts\\.map|svg)$"
+  ],
+  "forbiddenFilePatterns": [
+    "(?:^|/)\\.env(?:\\.|$)",
+    "(?:^|/)node_modules/",
+    "(?:^|/)tests?/",
+    "(?:^|/)scripts?/",
+    "(?:^|/)security/",
+    "(?:^|/)contracts?/",
+    "\\.tsbuildinfo$",
+    "(?<!\\.d)\\.ts$|\\.tsx$",
+    "\\.(?:tgz|tar|gz|zip)$",
+    "(?:^|/)(?:coverage|\\.nyc_output)/"
+  ],
+  "maximumFileBytes": 1048576,
+  "maximumUnpackedBytes": 2097152,
+  "maximumFileCount": 64
+}

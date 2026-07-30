@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sallaflow.cloud/contracts/catalog-contract.schema.json",
+  "title": "SallaFlow validation-only catalogue contract",
+  "type": "object",
+  "required": ["schemaVersion", "runtimeGeneration"],
+  "properties": {
+    "schemaVersion": {"const": 1},
+    "runtimeGeneration": {"const": false}
+  },
+  "additionalProperties": true
+}

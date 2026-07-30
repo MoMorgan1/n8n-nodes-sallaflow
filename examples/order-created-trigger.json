@@ -1,0 +1,43 @@
+{
+	"id": "sfOrderCreatedExample",
+	"name": "SallaFlow - Order Created",
+	"nodes": [
+		{
+			"parameters": {
+				"event": "order.created"
+			},
+			"id": "5bd6725e-29f4-4aa1-8236-2f9001d2018f",
+			"name": "Order Created",
+			"type": "n8n-nodes-sallaflow.sallaFlowTrigger",
+			"typeVersion": 2,
+			"position": [320, 300]
+		},
+		{
+			"parameters": {},
+			"id": "5b9c8f23-320a-43ae-bf3a-d25a0d40f0f4",
+			"name": "Handle Event",
+			"type": "n8n-nodes-base.noOp",
+			"typeVersion": 1,
+			"position": [560, 300]
+		}
+	],
+	"pinData": {},
+	"connections": {
+		"Order Created": {
+			"main": [
+				[
+					{
+						"node": "Handle Event",
+						"type": "main",
+						"index": 0
+					}
+				]
+			]
+		}
+	},
+	"active": false,
+	"settings": {
+		"executionOrder": "v1"
+	},
+	"tags": []
+}

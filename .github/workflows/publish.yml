@@ -1,0 +1,302 @@
+# Official GitHub action pins (immutable commits):
+# - actions/checkout v7.0.1: 3d3c42e5aac5ba805825da76410c181273ba90b1
+# - actions/setup-node v7.0.0: 820762786026740c76f36085b0efc47a31fe5020
+# - actions/upload-artifact v6.0.0: b7c566a772e6b6bfb58ed0dc250532a479d7789f
+# - actions/download-artifact v7.0.0: 37930b1c2abaa49bbe596cd826c3c89aef350131
+# Dependabot is configured to propose updates to these pins.
+#
+# Repository setup required before use:
+# 1. Protect v*.*.* tags with a GitHub ruleset that restricts tag creation.
+# 2. Create a protected `npm` environment with required reviewers.
+# 3. Configure npm Trusted Publishing for this repository, publish.yml, and
+#    the `npm` environment. Do not add an NPM_TOKEN secret.
+name: Publish
+
+on:
+  push:
+    tags:
+      - 'v[0-9]*.[0-9]*.[0-9]*'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: publish-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    name: Verify and publish to npm
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    environment:
+      name: npm
+    permissions:
+      contents: read
+      id-token: write
+    outputs:
+      version: ${{ steps.metadata.outputs.version }}
+      package_name: ${{ steps.metadata.outputs.package_name }}
+      commit: ${{ steps.metadata.outputs.commit }}
+      filename: ${{ steps.pack.outputs.filename }}
+      checksum: ${{ steps.pack.outputs.checksum }}
+
+    steps:
+      - name: Check out the protected tag
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+          persist-credentials: false
+          ref: ${{ github.ref }}
+
+      - name: Set up Node.js 22.22.0
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 22.22.0
+          registry-url: https://registry.npmjs.org
+          package-manager-cache: false
+
+      - name: Pin npm 11.12.1
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm install --global npm@11.12.1
+          test "$(node --version)" = "v22.22.0"
+          test "$(npm --version)" = "11.12.1"
+
+      - name: Verify tag, package version, and commit
+        id: metadata
+        shell: bash
+        env:
+          DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+        run: |
+          set -euo pipefail
+
+          tag="${GITHUB_REF_NAME}"
+          if [[ ! "${tag}" =~ ^v(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$ ]]; then
+            echo "::error::Release tags must use canonical stable SemVer: vMAJOR.MINOR.PATCH"
+            exit 1
+          fi
+
+          package_name="$(node -p "require('./package.json').name")"
+          package_version="$(node -p "require('./package.json').version")"
+          if [[ "${tag}" != "v${package_version}" ]]; then
+            echo "::error::Tag ${tag} does not match package version ${package_version}"
+            exit 1
+          fi
+
+          ref_object="$(git rev-parse "${GITHUB_REF}")"
+          tag_commit="$(git rev-parse "${GITHUB_REF}^{commit}")"
+          head_commit="$(git rev-parse HEAD)"
+          if [[ "${head_commit}" != "${tag_commit}" ]]; then
+            echo "::error::Checkout ${head_commit} is not the commit selected by ${tag}"
+            exit 1
+          fi
+          if [[ "${GITHUB_SHA}" != "${ref_object}" && "${GITHUB_SHA}" != "${tag_commit}" ]]; then
+            echo "::error::Workflow event SHA does not identify the pushed tag"
+            exit 1
+          fi
+
+          if ! git show-ref --verify --quiet "refs/remotes/origin/${DEFAULT_BRANCH}"; then
+            git fetch --no-tags origin \
+              "${DEFAULT_BRANCH}:refs/remotes/origin/${DEFAULT_BRANCH}"
+          fi
+          if ! git merge-base --is-ancestor \
+            "${tag_commit}" "refs/remotes/origin/${DEFAULT_BRANCH}"; then
+            echo "::error::The release commit is not on ${DEFAULT_BRANCH}"
+            exit 1
+          fi
+
+          if [[ -n "$(git status --porcelain --untracked-files=all)" ]]; then
+            echo "::error::The release checkout is not clean"
+            exit 1
+          fi
+
+          {
+            echo "package_name=${package_name}"
+            echo "version=${package_version}"
+            echo "commit=${tag_commit}"
+          } >> "${GITHUB_OUTPUT}"
+
+      - name: Install locked dependencies
+        run: npm ci
+
+      - name: Run official n8n lint
+        run: npm run lint
+
+      - name: Run tests
+        run: npm test
+
+      - name: Run coverage gates
+        run: npm run test:coverage
+
+      - name: Check saved-workflow compatibility
+        run: npm run test:saved-workflows
+
+      - name: Build and check source/dist consistency
+        run: npm run build:check
+
+      - name: Check package manifest
+        run: npm run check:manifest
+
+      - name: Scan for secrets and private URLs
+        run: npm run check:security
+
+      - name: Inspect npm dry-run package
+        run: npm run pack:dry-run
+
+      - name: Build and inspect real npm package
+        run: npm run pack:check
+
+      - name: Run the n8n release guard and final package checks
+        env:
+          RELEASE_MODE: '1'
+        run: npm run prepublishOnly
+
+      - name: Confirm the release build is reproducibly clean
+        shell: bash
+        run: |
+          set -euo pipefail
+          git diff --exit-code
+          test -z "$(git status --porcelain --untracked-files=all)"
+
+      - name: Refuse an already-published version
+        shell: bash
+        env:
+          PACKAGE_NAME: ${{ steps.metadata.outputs.package_name }}
+          PACKAGE_VERSION: ${{ steps.metadata.outputs.version }}
+        run: |
+          set -euo pipefail
+          if npm view "${PACKAGE_NAME}@${PACKAGE_VERSION}" version \
+            --registry "https://registry.npmjs.org/" >/dev/null 2>&1; then
+            echo "::error::${PACKAGE_NAME}@${PACKAGE_VERSION} already exists on npm"
+            exit 1
+          fi
+
+      - name: Build two byte-identical release candidates
+        id: pack
+        shell: bash
+        env:
+          ARTIFACT_DIR: ${{ runner.temp }}/release-artifacts
+        run: |
+          set -euo pipefail
+
+          pack_a_dir="${RUNNER_TEMP}/pack-a"
+          pack_b_dir="${RUNNER_TEMP}/pack-b"
+          mkdir -p "${pack_a_dir}" "${pack_b_dir}" "${ARTIFACT_DIR}"
+
+          npm pack --json --ignore-scripts --pack-destination "${pack_a_dir}" \
+            > "${RUNNER_TEMP}/pack-a.json"
+          npm pack --json --ignore-scripts --pack-destination "${pack_b_dir}" \
+            > "${RUNNER_TEMP}/pack-b.json"
+
+          file_a="$(node -e \
+            "const fs=require('fs');const x=JSON.parse(fs.readFileSync(process.argv[1],'utf8'));if(x.length!==1||!x[0].filename)process.exit(1);process.stdout.write(x[0].filename)" \
+            "${RUNNER_TEMP}/pack-a.json")"
+          file_b="$(node -e \
+            "const fs=require('fs');const x=JSON.parse(fs.readFileSync(process.argv[1],'utf8'));if(x.length!==1||!x[0].filename)process.exit(1);process.stdout.write(x[0].filename)" \
+            "${RUNNER_TEMP}/pack-b.json")"
+
+          if [[ "${file_a}" != "${file_b}" ]]; then
+            echo "::error::Independent packs produced different filenames"
+            exit 1
+          fi
+          if ! cmp --silent \
+            "${pack_a_dir}/${file_a}" "${pack_b_dir}/${file_b}"; then
+            echo "::error::Independent npm packs are not byte-identical"
+            exit 1
+          fi
+
+          cp "${pack_a_dir}/${file_a}" "${ARTIFACT_DIR}/${file_a}"
+          (
+            cd "${ARTIFACT_DIR}"
+            sha256sum "${file_a}" > "${file_a}.sha256"
+            sha256sum --check "${file_a}.sha256"
+          )
+          tar -tzf "${ARTIFACT_DIR}/${file_a}"
+
+          checksum="$(cut -d' ' -f1 "${ARTIFACT_DIR}/${file_a}.sha256")"
+          {
+            echo "filename=${file_a}"
+            echo "checksum=${checksum}"
+          } >> "${GITHUB_OUTPUT}"
+
+      - name: Check the exact release tarball contents
+        shell: bash
+        env:
+          TARBALL: ${{ runner.temp }}/release-artifacts/${{ steps.pack.outputs.filename }}
+        run: npm run pack:check -- --tarball "${TARBALL}"
+
+      - name: Upload release candidate and checksum
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+        with:
+          name: npm-release-${{ steps.metadata.outputs.version }}
+          path: |
+            ${{ runner.temp }}/release-artifacts/${{ steps.pack.outputs.filename }}
+            ${{ runner.temp }}/release-artifacts/${{ steps.pack.outputs.filename }}.sha256
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 90
+
+      - name: Publish exact tarball with npm Trusted Publishing
+        shell: bash
+        env:
+          TARBALL: ${{ runner.temp }}/release-artifacts/${{ steps.pack.outputs.filename }}
+        run: |
+          set -euo pipefail
+          unset NODE_AUTH_TOKEN NPM_TOKEN
+          npm publish "${TARBALL}" --ignore-scripts --access public --provenance
+
+  github-release:
+    name: Create GitHub release
+    needs: publish
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      actions: read
+      contents: write
+
+    steps:
+      - name: Download release candidate and checksum
+        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
+        with:
+          name: npm-release-${{ needs.publish.outputs.version }}
+          path: release-artifacts
+
+      - name: Verify downloaded checksum
+        shell: bash
+        env:
+          FILENAME: ${{ needs.publish.outputs.filename }}
+          EXPECTED_CHECKSUM: ${{ needs.publish.outputs.checksum }}
+        run: |
+          set -euo pipefail
+          cd release-artifacts
+          sha256sum --check "${FILENAME}.sha256"
+          actual_checksum="$(sha256sum "${FILENAME}" | cut -d' ' -f1)"
+          test "${actual_checksum}" = "${EXPECTED_CHECKSUM}"
+
+      - name: Generate release notes and create GitHub release
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          PACKAGE_NAME: ${{ needs.publish.outputs.package_name }}
+          PACKAGE_VERSION: ${{ needs.publish.outputs.version }}
+          FILENAME: ${{ needs.publish.outputs.filename }}
+          CHECKSUM: ${{ needs.publish.outputs.checksum }}
+          COMMIT_SHA: ${{ needs.publish.outputs.commit }}
+        run: |
+          set -euo pipefail
+          if gh release view "${GITHUB_REF_NAME}" >/dev/null 2>&1; then
+            echo "::error::GitHub release ${GITHUB_REF_NAME} already exists"
+            exit 1
+          fi
+
+          gh release create "${GITHUB_REF_NAME}" \
+            "release-artifacts/${FILENAME}" \
+            "release-artifacts/${FILENAME}.sha256" \
+            --verify-tag \
+            --title "${PACKAGE_NAME} ${PACKAGE_VERSION}" \
+            --generate-notes \
+            --notes "Published from commit ${COMMIT_SHA} with npm provenance. SHA-256: ${CHECKSUM}"

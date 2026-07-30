@@ -1,0 +1,64 @@
+{
+  "schemaVersion": 1,
+  "ignoredDirectories": [
+    ".git",
+    "node_modules",
+    "coverage",
+    ".nyc_output",
+    ".npm"
+  ],
+  "allowedDomainSuffixes": [
+    ".example",
+    "example.com",
+    "example.net",
+    "example.org",
+    "salla.dev",
+    "salla.sa",
+    "salla.com",
+    "n8n.io",
+    "github.com",
+    "githubusercontent.com",
+    "npmjs.org",
+    "npmjs.com",
+    "json-schema.org",
+    "w3.org",
+    "shields.io"
+  ],
+  "allowedExactHosts": [
+    "localhost",
+    "127.0.0.1",
+    "::1",
+    "sallaflow.cloud",
+    "www.sallaflow.cloud",
+    "api.sallaflow.cloud"
+  ],
+  "allowedEmailDomainSuffixes": [
+    "example.com",
+    "sallaflow.cloud",
+    "users.noreply.github.com"
+  ],
+  "allowedExactEmails": [
+    "name@email.com"
+  ],
+  "syntheticSecretValues": [
+    "key",
+    "test",
+    "test-key",
+    "test-secret",
+    "fake",
+    "dummy",
+    "placeholder",
+    "example",
+    "redacted",
+    "changeme",
+    "your-api-key",
+    "your-token"
+  ],
+  "forbiddenPathFragments": [
+    "/opt/sallaflow",
+    "/root/sallaflow",
+    "/root/deploy-backups",
+    "/var/lib/postgresql",
+    "/etc/sallaflow"
+  ]
+}

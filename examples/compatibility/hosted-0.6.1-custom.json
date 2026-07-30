@@ -1,0 +1,88 @@
+{
+	"id": "sfHosted061Fixture",
+	"name": "SallaFlow Hosted 0.6.1 Compatibility",
+	"active": false,
+	"settings": {
+		"executionOrder": "v1"
+	},
+	"nodes": [
+		{
+			"id": "6a980f0d-a975-4709-bfbd-e66ef904fd44",
+			"name": "When clicking Execute Workflow",
+			"type": "n8n-nodes-base.manualTrigger",
+			"typeVersion": 1,
+			"position": [260, 240],
+			"parameters": {}
+		},
+		{
+			"id": "e330554f-2e2d-467e-887a-a8c403f2f5e1",
+			"name": "Get Products",
+			"type": "CUSTOM.sallaFlow",
+			"typeVersion": 5,
+			"position": [500, 240],
+			"parameters": {
+				"resource": "product",
+				"operation": "getAll",
+				"returnAll": false,
+				"limit": 10,
+				"page": 1
+			},
+			"credentials": {
+				"sallaFlowApi": {
+					"id": "synthetic-sallaflow-credential",
+					"name": "Synthetic SallaFlow API"
+				}
+			}
+		},
+		{
+			"id": "f017569c-c489-4c83-b98e-bf1552aa18b3",
+			"name": "Order Created",
+			"type": "CUSTOM.sallaFlowTrigger",
+			"typeVersion": 2,
+			"position": [260, 440],
+			"parameters": {
+				"event": "order.created"
+			},
+			"credentials": {
+				"sallaFlowApi": {
+					"id": "synthetic-sallaflow-credential",
+					"name": "Synthetic SallaFlow API"
+				}
+			}
+		},
+		{
+			"id": "a03aad0f-6be6-4cb1-a4c6-33d50e3fbeee",
+			"name": "Handle Event",
+			"type": "n8n-nodes-base.noOp",
+			"typeVersion": 1,
+			"position": [500, 440],
+			"parameters": {}
+		}
+	],
+	"connections": {
+		"When clicking Execute Workflow": {
+			"main": [
+				[
+					{
+						"node": "Get Products",
+						"type": "main",
+						"index": 0
+					}
+				]
+			]
+		},
+		"Order Created": {
+			"main": [
+				[
+					{
+						"node": "Handle Event",
+						"type": "main",
+						"index": 0
+					}
+				]
+			]
+		}
+	},
+	"pinData": {},
+	"tags": []
+}

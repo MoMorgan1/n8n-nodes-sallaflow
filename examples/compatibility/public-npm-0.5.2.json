@@ -1,0 +1,76 @@
+{
+	"id": "sfPublic052Fixture",
+	"name": "SallaFlow Public npm 0.5.2 Compatibility",
+	"active": false,
+	"settings": {
+		"executionOrder": "v1"
+	},
+	"nodes": [
+		{
+			"id": "66a74145-e813-4d7b-a011-672b02f0f57f",
+			"name": "When clicking Execute Workflow",
+			"type": "n8n-nodes-base.manualTrigger",
+			"typeVersion": 1,
+			"position": [260, 240],
+			"parameters": {}
+		},
+		{
+			"id": "cd69f3d5-7a4d-4771-bc46-eaaafba6c59c",
+			"name": "Get Products",
+			"type": "n8n-nodes-sallaflow.sallaFlow",
+			"typeVersion": 5,
+			"position": [500, 240],
+			"parameters": {
+				"resource": "product",
+				"operation": "getAll",
+				"returnAll": false,
+				"limit": 10,
+				"page": 1
+			}
+		},
+		{
+			"id": "a09302e4-b740-4ef3-83d9-933776f41b24",
+			"name": "Order Created",
+			"type": "n8n-nodes-sallaflow.sallaFlowTrigger",
+			"typeVersion": 2,
+			"position": [260, 440],
+			"parameters": {
+				"event": "order.created"
+			}
+		},
+		{
+			"id": "884f4b54-ac92-4b11-ad6f-7b0bb7fe9b16",
+			"name": "Handle Event",
+			"type": "n8n-nodes-base.noOp",
+			"typeVersion": 1,
+			"position": [500, 440],
+			"parameters": {}
+		}
+	],
+	"connections": {
+		"When clicking Execute Workflow": {
+			"main": [
+				[
+					{
+						"node": "Get Products",
+						"type": "main",
+						"index": 0
+					}
+				]
+			]
+		},
+		"Order Created": {
+			"main": [
+				[
+					{
+						"node": "Handle Event",
+						"type": "main",
+						"index": 0
+					}
+				]
+			]
+		}
+	},
+	"pinData": {},
+	"tags": []
+}

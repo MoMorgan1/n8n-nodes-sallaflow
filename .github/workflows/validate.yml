@@ -1,0 +1,89 @@
+# Official GitHub action pins (immutable commits):
+# - actions/checkout v7.0.1: 3d3c42e5aac5ba805825da76410c181273ba90b1
+# - actions/setup-node v7.0.0: 820762786026740c76f36085b0efc47a31fe5020
+# Dependabot is configured to propose updates to these pins.
+name: Validate
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    name: Lint, test, build, and package
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+
+    steps:
+      - name: Check out the exact revision
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Set up Node.js 22.22.0
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 22.22.0
+          cache: npm
+          cache-dependency-path: package-lock.json
+
+      - name: Pin npm 11.12.1
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm install --global npm@11.12.1
+          test "$(node --version)" = "v22.22.0"
+          test "$(npm --version)" = "11.12.1"
+
+      - name: Install locked dependencies
+        run: npm ci
+
+      - name: Run official n8n lint
+        run: npm run lint
+
+      - name: Run tests
+        run: npm test
+
+      - name: Run coverage gates
+        run: npm run test:coverage
+
+      - name: Check saved-workflow compatibility
+        run: npm run test:saved-workflows
+
+      - name: Check compatibility snapshots
+        run: npm run check:compatibility
+
+      - name: Build and check source/dist consistency
+        run: npm run build:check
+
+      - name: Check package manifest
+        run: npm run check:manifest
+
+      - name: Scan for secrets and private URLs
+        run: npm run check:security
+
+      - name: Scan complete reachable Git history
+        run: npm run check:history
+
+      - name: Inspect npm dry-run package
+        run: npm run pack:dry-run
+
+      - name: Build and inspect real npm package
+        run: npm run pack:check
+
+      - name: Confirm validation left the checkout clean
+        shell: bash
+        run: |
+          set -euo pipefail
+          git diff --exit-code
+          test -z "$(git status --porcelain --untracked-files=all)"
