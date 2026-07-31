@@ -1,12 +1,12 @@
 # n8n Creator Portal Submission Package
 
-Status: **Prepared, not submitted; current scanner remediation required**
+Status: **Prepared, not submitted; authenticated demonstration required**
 
-The public repository and npm release now exist. This dossier does not claim
-n8n approval. Resolve the current official scanner findings and complete the
-authenticated demonstration before submission. Recheck the live Creator
-Portal and current official instructions immediately before submission because
-form fields can change.
+The public repository and npm release now exist, and the current official
+registry scanner passes. This dossier does not claim n8n approval. Complete
+the authenticated demonstration before submission. Recheck the live Creator
+Portal and current official instructions immediately before submission
+because form fields can change.
 
 ## Package identity
 
@@ -14,7 +14,7 @@ form fields can change.
 | ----------------------- | --------------------------------------------------- |
 | Node                    | SallaFlow                                           |
 | npm package             | `n8n-nodes-sallaflow`                               |
-| Published version       | `0.6.2`                                             |
+| Published version       | `0.6.3`                                             |
 | npm URL                 | `https://www.npmjs.com/package/n8n-nodes-sallaflow` |
 | GitHub repository       | `https://github.com/MoMorgan1/n8n-nodes-sallaflow`  |
 | Documentation           | Repository `README.md`                              |
@@ -31,15 +31,15 @@ form fields can change.
 
 Publication evidence:
 
-- Release commit: `27874435cfea916e93a2ac7116cb4860366be9a3`
-- Protected tag: `v0.6.2`
+- Release commit: `3c4e1b54f4a9cd7bc1166cc29493ed958e94986c`
+- Protected tag: `v0.6.3`
 - Registry tarball SHA-256:
-  `263481bbb0e986b9e856dc737b1885cd9f4eb1ae64ae94a4b34fd30c11a515c4`
-- [GitHub Actions publication run](https://github.com/MoMorgan1/n8n-nodes-sallaflow/actions/runs/30607600157)
-- [npm provenance attestation](https://registry.npmjs.org/-/npm/v1/attestations/n8n-nodes-sallaflow@0.6.2)
+  `1931d9e345b162733d08951ce702a667ae5e14aa6003ab94c393323f86f54d4c`
+- [GitHub Actions publication run](https://github.com/MoMorgan1/n8n-nodes-sallaflow/actions/runs/30613237411)
+- [npm provenance attestation](https://registry.npmjs.org/-/npm/v1/attestations/n8n-nodes-sallaflow@0.6.3)
 - Registry-install validation: passed on fresh n8n 2.32.6 and 2.6.3
-- Official scanner: blocked; stable 0.29.1 reports 32 ESLint errors and latest
-  0.30.0 reports 34
+- Official scanner: `@n8n/scan-community-package@0.30.0` passed provenance,
+  source retrieval, package download, and analysis
 
 ## Program terminology
 
@@ -133,7 +133,7 @@ Provide n8n with an authorized synthetic test-store account and integration key
 through its approved private channel. Do not commit test credentials.
 
 1. Use a clean supported self-hosted n8n environment.
-2. Install exact npm version `n8n-nodes-sallaflow@0.6.2`.
+2. Install exact npm version `n8n-nodes-sallaflow@0.6.3`.
 3. Add **SallaFlow** and **SallaFlow Trigger** from the node picker.
 4. Create **SallaFlow API** credentials and run the credential test.
 5. Run **Product → Get Many** with **Return All** off and **Limit** `10`.
@@ -153,7 +153,7 @@ The current official process asks for a single uncut video of no more than five
 minutes. Use this final recording checklist:
 
 1. `0:00–0:35` — show a clean compatible n8n workspace and installed registry
-   version `n8n-nodes-sallaflow@0.6.2`.
+   version `n8n-nodes-sallaflow@0.6.3`.
 2. `0:35–1:05` — show **SallaFlow** and **SallaFlow Trigger** in the node
    picker.
 3. `1:05–1:35` — create or select **SallaFlow API** credentials and run the
@@ -209,7 +209,7 @@ SallaFlow intends to:
 - use patch releases for focused reviewer fixes
 - monitor n8n, npm, and Salla requirements and respond to security reports
 
-Action v5 and Trigger v2 are retained for 0.6.2. The legacy
+Action v5 and Trigger v2 are retained for 0.6.3. The legacy
 `shipment.return.creating` alias is preserved.
 
 Workflows exported from the hosted private deployment use
@@ -225,7 +225,7 @@ excluded from the published runtime package.
 Before the owner approves final submission, verify:
 
 - the public repository URL resolves to the scanned release commit
-- npm 0.6.2 is published from the protected workflow
+- npm 0.6.3 is published from the protected workflow
 - npm shows provenance for that exact package version
 - the registry tarball passed clean-install and compatibility tests
 - the current stable official community-package scanner passes the submitted

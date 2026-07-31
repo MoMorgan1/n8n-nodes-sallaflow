@@ -26,14 +26,13 @@ the current supported model is npm Trusted Publishing with GitHub OIDC.
 
 ## Compliance matrix
 
-`Passed` means evidence exists for the published 0.6.2 artifact. `Pending`
-means an owner or external reviewer action is still required. `Blocked` means
-a focused follow-up package release is required before submission.
+`Passed` means evidence exists for the published 0.6.3 artifact. `Pending`
+means an owner or external reviewer action is still required.
 
 | Requirement                                     | Current evidence                                                                                                           | Status                             |
 | ----------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- | ---------------------------------- |
-| Public npm community-node package               | npm `latest` is `n8n-nodes-sallaflow@0.6.2`                                                                                | Passed                             |
-| Public GitHub repository                        | Release tag `v0.6.2` resolves to commit `27874435cfea916e93a2ac7116cb4860366be9a3`                                       | Passed                             |
+| Public npm community-node package               | npm `latest` is `n8n-nodes-sallaflow@0.6.3`                                                                                | Passed                             |
+| Public GitHub repository                        | Release tag `v0.6.3` resolves to commit `3c4e1b54f4a9cd7bc1166cc29493ed958e94986c`                                       | Passed                             |
 | GitHub Actions provenance                       | npm Trusted Publishing/OIDC provenance links the package to `publish.yml`, the release tag, commit, and run                | Passed                             |
 | MIT license                                     | Root `LICENSE` and published package metadata                                                                              | Passed                             |
 | Official n8n build tool                         | `@n8n/node-cli` is pinned and used for build, lint, and prerelease validation                                              | Passed for the release toolchain   |
@@ -51,7 +50,7 @@ a focused follow-up package release is required before submission.
 | Stable saved workflows                          | Public 0.5.2 and migrated hosted 0.6.1 fixtures imported and resolved in fresh n8n 2.32.6 and 2.6.3 installs               | Passed                             |
 | Documentation                                   | Install, credentials, examples, operations, events, limitations, security, privacy, terms, support, and uninstall guidance | Passed                             |
 | Sensitive-data exclusion                        | Full release-tree, Git-history, generated-file, fixture, and tarball scans passed                                           | Passed                             |
-| Official lint and security scan                 | Release lint/prerelease gates passed, but current official scanner stable 0.29.1 reports 32 ESLint errors; latest 0.30.0 reports 34 | Blocked for Creator Portal submission |
+| Official lint and security scan                 | Release lint/prerelease gates and official registry scanner 0.30.0 passed provenance, source retrieval, download, and analysis | Passed                             |
 | Package allowlist                               | Published tarball has 23 allowed files and matches the reviewed release checksum                                           | Passed                             |
 | Public support channel                          | `info@sallaflow.cloud` and public troubleshooting/security guidance                                                        | Passed                             |
 | Creator Portal ownership proof                  | Requires code sent to npm author email                                                                                     | Owner action pending               |
@@ -61,23 +60,19 @@ a focused follow-up package release is required before submission.
 
 ## Post-publication scanner result
 
-The official `@n8n/scan-community-package` registry scan passed provenance,
-source retrieval, package download, and static analysis setup, then failed its
-ESLint gate:
+The pinned official `@n8n/scan-community-package@0.30.0` registry scan passed
+all stages for 0.6.3:
 
-- stable `0.29.1`: 32 errors
-- latest `0.30.0`: 34 errors
+- npm provenance
+- source retrieval from GitHub commit `3c4e1b5`
+- registry package download
+- source and compiled-package static analysis
 
-Most findings require alphabetizing displayed options or using `ID`
-capitalization. The Trigger also needs an explicit `usableAsTool` declaration;
-the latest scanner adds two findings for silently swallowed webhook lifecycle
-errors. Fresh n8n runtime exports confirm that 0.6.2 generates an Action Tool
-and does not generate a Trigger Tool, so this is a verification-compliance
-blocker rather than a discovered runtime exposure.
-
-Do not submit 0.6.2 to Creator Portal as a clean scan. Prepare a focused patch
-release, rerun the current stable and latest scanners, and update this matrix
-with the passing package version.
+The 0.6.3 patch alphabetizes displayed options, corrects metadata
+capitalization, declares Action and Trigger AI-tool eligibility explicitly,
+and surfaces webhook lifecycle failures through credential-safe logs. Fresh
+n8n runtime exports confirm that 0.6.3 generates an Action Tool and does not
+generate a Trigger Tool.
 
 ## External SaaS review point
 

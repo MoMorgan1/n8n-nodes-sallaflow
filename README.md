@@ -344,7 +344,7 @@ separately. See [`CONTRIBUTING.md`](CONTRIBUTING.md) and
 
 Current n8n requirements and the evidence still needed for verification are
 tracked in [`docs/VERIFICATION_COMPLIANCE.md`](docs/VERIFICATION_COMPLIANCE.md).
-The exact 0.6.2 publication and registry-install evidence is recorded in
+The exact 0.6.3 publication and registry-install evidence is recorded in
 [`docs/POST_PUBLICATION_VALIDATION.md`](docs/POST_PUBLICATION_VALIDATION.md).
 
 ## License
