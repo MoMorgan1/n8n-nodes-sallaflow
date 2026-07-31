@@ -461,7 +461,7 @@ test('trigger registration uses the selected event and n8n webhook URL', async (
   });
 });
 
-test('trigger lifecycle checks exact event and URL, tolerates lookup/delete failures', async () => {
+test('trigger lifecycle checks the exact event and URL', async () => {
   const trigger = new SallaFlowTrigger();
   const baseContext = {
     getNodeWebhookUrl: () => 'https://n8n.example/webhook/test',
@@ -495,25 +495,36 @@ test('trigger lifecycle checks exact event and URL, tolerates lookup/delete fail
     },
   });
   assert.equal(absent, false);
+});
 
+test('trigger lifecycle reports lookup failures without leaking request details', async () => {
+  const trigger = new SallaFlowTrigger();
+  const logs = [];
   const lookupFailure = await trigger.webhookMethods.default.checkExists.call({
-    ...baseContext,
+    getNodeWebhookUrl: () => 'https://n8n.example/webhook/private-token',
+    getNodeParameter: () => 'order.created',
+    logger: { error: (message) => logs.push(message) },
     helpers: {
       httpRequestWithAuthentication: async () => {
-        throw new Error('offline');
+        throw new Error('offline: secret-detail');
       },
     },
   });
   assert.equal(lookupFailure, false);
+  assert.deepEqual(logs, ['Unable to verify the SallaFlow webhook registration']);
+  assert.doesNotMatch(logs.join(' '), /private-token|secret-detail/);
+});
 
+test('trigger deletion sends the exact subscription identity and completes cleanup', async () => {
+  const trigger = new SallaFlowTrigger();
   const deleteCalls = [];
   const deleted = await trigger.webhookMethods.default.delete.call({
-    ...baseContext,
-    logger: { warn: () => {} },
+    getNodeWebhookUrl: () => 'https://n8n.example/webhook/test',
+    getNodeParameter: () => 'order.created',
     helpers: {
       httpRequestWithAuthentication: async (_credentialType, request) => {
         deleteCalls.push(request);
-        throw new Error('already removed');
+        return { success: true };
       },
     },
   });
@@ -522,6 +533,25 @@ test('trigger lifecycle checks exact event and URL, tolerates lookup/delete fail
     event: 'order.created',
     webhookUrl: 'https://n8n.example/webhook/test',
   });
+});
+
+test('trigger deletion reports remote cleanup failures without blocking local cleanup', async () => {
+  const trigger = new SallaFlowTrigger();
+  const logs = [];
+  const deleted = await trigger.webhookMethods.default.delete.call({
+    getNodeWebhookUrl: () => 'https://n8n.example/webhook/private-token',
+    getNodeParameter: () => 'order.created',
+    logger: { error: (message) => logs.push(message) },
+    helpers: {
+      httpRequestWithAuthentication: async () => {
+        throw new Error('already removed: secret-detail');
+      },
+    },
+  });
+
+  assert.equal(deleted, true);
+  assert.deepEqual(logs, ['Unable to remove the SallaFlow webhook registration']);
+  assert.doesNotMatch(logs.join(' '), /private-token|secret-detail/);
 });
 
 test('trigger registration rejects an unsuccessful backend response', async () => {

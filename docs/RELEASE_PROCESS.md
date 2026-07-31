@@ -60,7 +60,7 @@ cross-repository release automation.
 Example checksum command:
 
 ```bash
-sha256sum n8n-nodes-sallaflow-0.6.2.tgz
+sha256sum n8n-nodes-sallaflow-0.6.3.tgz
 ```
 
 Record the commit, toolchain versions, validation result, tarball path,
@@ -121,8 +121,8 @@ Do not move or recreate a published tag.
 Use the exact registry version, not the local tarball:
 
 ```bash
-npm view n8n-nodes-sallaflow@0.6.2
-npm pack n8n-nodes-sallaflow@0.6.2
+npm view n8n-nodes-sallaflow@0.6.3
+npm pack n8n-nodes-sallaflow@0.6.3
 ```
 
 Install it into a fresh supported n8n environment and repeat discovery,

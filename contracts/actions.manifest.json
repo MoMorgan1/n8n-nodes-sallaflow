@@ -9,7 +9,7 @@
     "operationCount": 46
   },
   "descriptorHashes": {
-    "resourcesSha256": "a50e210c9ea1fe4b3d52aa0740596095fb13091bf2b6c1f29f1985dc36e05894",
+    "resourcesSha256": "3018a90652173791e7423f8c9938f6d9dc7eba5ae3423b6ba938cee3a97814c4",
     "operationsSha256": "778a034cea3d734636dfab7093cbb0716e3dc11c9f988c38ad4e545aacec6cdf"
   },
   "resources": [
@@ -17,13 +17,13 @@
     "brand",
     "category",
     "coupon",
+    "customApiCall",
     "customer",
+    "feedback",
     "order",
     "product",
     "productOption",
-    "productVariant",
-    "feedback",
-    "customApiCall"
+    "productVariant"
   ],
   "dynamicLoaders": [
     "getAbandonedCarts",

@@ -21,7 +21,7 @@ official unless n8n grants that status.
 [Salla app](https://apps.salla.sa/ar/app/525017169) ·
 [Support](mailto:info@sallaflow.cloud)
 
-> npm `latest` is 0.6.2. This remains an unverified n8n Community Node;
+> npm `latest` is 0.6.3. This remains an unverified n8n Community Node;
 > verification submission is pending, and it is not officially available on
 > n8n Cloud.
 
@@ -38,7 +38,7 @@ subscription. Install it in a compatible workspace where npm Community Nodes
 installation is enabled. Any separately advertised hosting service is outside
 this package and governed by its own current plan terms.
 
-Version 0.6.2 is tested from the exact npm registry package with n8n 2.32.6
+Version 0.6.3 is tested from the exact npm registry package with n8n 2.32.6
 and with the existing hosted compatibility target n8n 2.6.3. The package uses
 Action type version 5 and Trigger type version 2 on both. n8n 2.6.3 is a
 migration test target, not a recommendation to remain on an older n8n release.

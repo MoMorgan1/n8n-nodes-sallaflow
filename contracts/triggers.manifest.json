@@ -8,7 +8,7 @@
     "canonicalEventCount": 64,
     "selectableEventCount": 65
   },
-  "descriptorHash": "1519b0f80c86ccb6aa2be250866bd3d02381ae84f336b9dadc006377184bfb31",
+  "descriptorHash": "0664ff0c19609e631e5bfd6dcf471095044fd44db96f8a2661f4800b03bcd2ab",
   "canonicalEvents": [
     "order.created",
     "order.updated",

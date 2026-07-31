@@ -44,7 +44,8 @@ test('only the Action is exposed as an AI tool', () => {
   const trigger = new SallaFlowTrigger();
 
   assert.equal(action.description.usableAsTool, true);
-  assert.equal('usableAsTool' in trigger.description, false);
+  assert.equal('usableAsTool' in trigger.description, true);
+  assert.equal(trigger.description.usableAsTool, undefined);
   assert.deepEqual(trigger.description.inputs, []);
 });
 
@@ -87,7 +88,7 @@ test('feedback exposes every currently documented type', () => {
   const node = new SallaFlow();
   const filters = property(node, 'feedbackFilters');
   const types = filters.options.find((entry) => entry.name === 'type').options.map((entry) => entry.value);
-  assert.deepEqual(types, ['product', 'ask', 'blog', 'reported', 'shipping', 'store']);
+  assert.deepEqual(types, ['blog', 'ask', 'product', 'reported', 'shipping', 'store']);
 });
 
 test('every audited Get Many resource exposes a dedicated filter collection', () => {
