@@ -1,63 +1,70 @@
-# 0.6.2 post-publication validation
+# 0.6.3 post-publication validation
 
 Validated 2026-07-31 against the exact npm registry package.
 
 ## Publication evidence
 
-- npm: `n8n-nodes-sallaflow@0.6.2`
-- npm `latest`: `0.6.2`
-- tag: `v0.6.2`
-- release commit: `27874435cfea916e93a2ac7116cb4860366be9a3`
+- npm: `n8n-nodes-sallaflow@0.6.3`
+- npm `latest`: `0.6.3`
+- published: `2026-07-31T09:17:58.189Z`
+- tag: `v0.6.3`
+- release commit: `3c4e1b54f4a9cd7bc1166cc29493ed958e94986c`
 - publish workflow:
-  <https://github.com/MoMorgan1/n8n-nodes-sallaflow/actions/runs/30607600157>
+  <https://github.com/MoMorgan1/n8n-nodes-sallaflow/actions/runs/30613237411>
 - GitHub Release:
-  <https://github.com/MoMorgan1/n8n-nodes-sallaflow/releases/tag/v0.6.2>
+  <https://github.com/MoMorgan1/n8n-nodes-sallaflow/releases/tag/v0.6.3>
 - npm provenance:
-  <https://registry.npmjs.org/-/npm/v1/attestations/n8n-nodes-sallaflow@0.6.2>
-- tarball size: 70,317 bytes
+  <https://registry.npmjs.org/-/npm/v1/attestations/n8n-nodes-sallaflow@0.6.3>
+- tarball size: 70,457 bytes
 - tarball SHA-256:
-  `263481bbb0e986b9e856dc737b1885cd9f4eb1ae64ae94a4b34fd30c11a515c4`
+  `1931d9e345b162733d08951ce702a667ae5e14aa6003ab94c393323f86f54d4c`
+- npm integrity:
+  `sha512-F+Yl2OPpCyC7FZHJLHeInDsglw9U+R7kE4qb8XdKmN4soA/raEaF81EaLlShtGEX7FHfOfRUBDavsRyA1XN4aA==`
 
 The reviewed release candidate, GitHub Release asset, and npm registry
-tarball are byte-identical.
+tarball are byte-identical and contain exactly the 23 allowlisted files.
 
 The SLSA provenance statement identifies:
 
 - repository `https://github.com/MoMorgan1/n8n-nodes-sallaflow`
 - workflow `.github/workflows/publish.yml`
-- tag `refs/tags/v0.6.2`
-- commit `27874435cfea916e93a2ac7116cb4860366be9a3`
-- workflow run `30607600157`
+- tag `refs/tags/v0.6.3`
+- commit `3c4e1b54f4a9cd7bc1166cc29493ed958e94986c`
+- workflow run `30613237411`, attempt 1
+- GitHub-hosted builder
+- protected GitHub environment `npm`
+- Sigstore transparency-log index `2299963968`
 
 ## Fresh registry installations
 
-Fresh disposable n8n 2.32.6 and 2.6.3 environments installed the package by
-the exact registry coordinate, with no credentials and no outbound runtime
-access. Both passed:
+Fresh disposable n8n 2.32.6 and 2.6.3 environments installed the exact
+registry tarball with lifecycle scripts disabled, no credentials, and no
+outbound runtime access. Both passed:
 
-- SallaFlow API credential definition loaded
+- SallaFlow API credential definition loaded with a required password-masked
+  integration key and credential test
 - Action v5 loaded with 11 resources and 46 public operations
 - Trigger v2 loaded with 65 unique selectable choices
 - the Action Tool node was generated
 - no Trigger Tool node was generated
-- the public 0.5.2 saved workflow imported and resolved
+- the public 0.5.2 saved workflow imported unchanged and resolved
 - the hosted 0.6.1 workflow imported and resolved after the documented two
   exact `CUSTOM.*` namespace replacements
 
+The imported workflows remained inactive. No integration key, credential
+entity, merchant, customer, or production data was used.
+
 ## Official scanner
 
-The official scanner passed provenance, source retrieval, download, and
-analysis setup, but failed its ESLint gate:
+The pinned official registry scanner
+`@n8n/scan-community-package@0.30.0` passed all checks:
 
-| Scanner | Result |
-| --- | --- |
-| `@n8n/scan-community-package@0.29.1` (`stable`) | 32 errors |
-| `@n8n/scan-community-package@0.30.0` (`latest`) | 34 errors |
+- npm provenance
+- source retrieval from GitHub commit `3c4e1b5`
+- registry package download
+- source and compiled-package static analysis
 
-The findings are display-order and `ID` capitalization rules, an explicit
-Trigger `usableAsTool` declaration, and—on 0.30.0—two webhook lifecycle error
-handling rules. This blocks Creator Portal submission of 0.6.2 as a clean
-package. It does not invalidate the successful runtime-install checks.
+The scanner remediation that blocked 0.6.2 is resolved in 0.6.3.
 
 ## Authenticated demonstration
 
@@ -71,6 +78,8 @@ workspace before recording the final submission video.
 
 ## Submission status
 
-Creator Portal submission has not been made. Prepare a focused patch release
-that passes the current official scanner, complete the authenticated demo and
-five-minute video, then request separate explicit approval to submit.
+Creator Portal submission has not been made. Publication, provenance,
+official-scanner, package-integrity, fresh-install, catalogue, AI Tool, and
+saved-workflow compatibility checks are complete. The authenticated demo,
+sanitized screenshots, five-minute video, and separate owner approval remain
+required before submission.
