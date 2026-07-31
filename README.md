@@ -21,10 +21,9 @@ official unless n8n grants that status.
 [Salla app](https://apps.salla.sa/ar/app/525017169) ·
 [Support](mailto:info@sallaflow.cloud)
 
-> The source in this repository targets 0.6.2. The npm registry is the source
-> of truth for released versions. If npm does not list 0.6.2, this repository
-> version is still a release candidate and `npm install` will install the
-> registry's current release.
+> npm `latest` is 0.6.2. This remains an unverified n8n Community Node;
+> verification submission is pending, and it is not officially available on
+> n8n Cloud.
 
 ## Requirements
 
@@ -39,11 +38,10 @@ subscription. Install it in a compatible workspace where npm Community Nodes
 installation is enabled. Any separately advertised hosting service is outside
 this package and governed by its own current plan terms.
 
-The 0.6.2 release candidate is tested with n8n 2.32.6, which was the current
-stable release when it was prepared, and with the existing hosted compatibility
-target n8n 2.6.3. The package uses Action type version 5 and Trigger type
-version 2 on both. n8n 2.6.3 is a migration test target, not a recommendation
-to remain on an older n8n release.
+Version 0.6.2 is tested from the exact npm registry package with n8n 2.32.6
+and with the existing hosted compatibility target n8n 2.6.3. The package uses
+Action type version 5 and Trigger type version 2 on both. n8n 2.6.3 is a
+migration test target, not a recommendation to remain on an older n8n release.
 
 ## Installation
 
@@ -346,6 +344,8 @@ separately. See [`CONTRIBUTING.md`](CONTRIBUTING.md) and
 
 Current n8n requirements and the evidence still needed for verification are
 tracked in [`docs/VERIFICATION_COMPLIANCE.md`](docs/VERIFICATION_COMPLIANCE.md).
+The exact 0.6.2 publication and registry-install evidence is recorded in
+[`docs/POST_PUBLICATION_VALIDATION.md`](docs/POST_PUBLICATION_VALIDATION.md).
 
 ## License
 

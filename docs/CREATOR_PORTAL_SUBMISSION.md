@@ -1,11 +1,12 @@
 # n8n Creator Portal Submission Package
 
-Status: **Prepared, not submitted**
+Status: **Prepared, not submitted; current scanner remediation required**
 
-This dossier is ready to be completed after the public repository and npm
-release exist. It does not claim n8n approval. Recheck the live Creator Portal
-and current official instructions immediately before submission because form
-fields can change.
+The public repository and npm release now exist. This dossier does not claim
+n8n approval. Resolve the current official scanner findings and complete the
+authenticated demonstration before submission. Recheck the live Creator
+Portal and current official instructions immediately before submission because
+form fields can change.
 
 ## Package identity
 
@@ -13,7 +14,7 @@ fields can change.
 | ----------------------- | --------------------------------------------------- |
 | Node                    | SallaFlow                                           |
 | npm package             | `n8n-nodes-sallaflow`                               |
-| Planned version         | `0.6.2`                                             |
+| Published version       | `0.6.2`                                             |
 | npm URL                 | `https://www.npmjs.com/package/n8n-nodes-sallaflow` |
 | GitHub repository       | `https://github.com/MoMorgan1/n8n-nodes-sallaflow`  |
 | Documentation           | Repository `README.md`                              |
@@ -28,14 +29,17 @@ fields can change.
 | Catalogue               | 11 resources, 46 operations                         |
 | Trigger catalogue       | 64 canonical events, 65 selectable choices          |
 
-Complete after publication:
+Publication evidence:
 
-- Release commit: `[record full commit SHA]`
+- Release commit: `27874435cfea916e93a2ac7116cb4860366be9a3`
 - Protected tag: `v0.6.2`
-- Registry tarball SHA-256: `[record checksum]`
-- GitHub Actions publication run: `[record public URL]`
-- npm provenance evidence: `[record public URL or attestation reference]`
-- Clean registry-install validation: `[record result and evidence]`
+- Registry tarball SHA-256:
+  `263481bbb0e986b9e856dc737b1885cd9f4eb1ae64ae94a4b34fd30c11a515c4`
+- [GitHub Actions publication run](https://github.com/MoMorgan1/n8n-nodes-sallaflow/actions/runs/30607600157)
+- [npm provenance attestation](https://registry.npmjs.org/-/npm/v1/attestations/n8n-nodes-sallaflow@0.6.2)
+- Registry-install validation: passed on fresh n8n 2.32.6 and 2.6.3
+- Official scanner: blocked; stable 0.29.1 reports 32 ESLint errors and latest
+  0.30.0 reports 34
 
 ## Program terminology
 
@@ -146,15 +150,21 @@ No customer or production merchant data is needed.
 ## Manual-review video script
 
 The current official process asks for a single uncut video of no more than five
-minutes. Record:
+minutes. Use this final recording checklist:
 
-1. a clean n8n instance and exact installed npm version
-2. installation from the community-node package
-3. both nodes in the node picker
-4. credential creation and successful test, with the key fully obscured
-5. configuration and execution of a common Action
-6. activation and receipt of a Trigger event
-7. one Action used as an AI tool
+1. `0:00–0:35` — show a clean compatible n8n workspace and installed registry
+   version `n8n-nodes-sallaflow@0.6.2`.
+2. `0:35–1:05` — show **SallaFlow** and **SallaFlow Trigger** in the node
+   picker.
+3. `1:05–1:35` — create or select **SallaFlow API** credentials and run the
+   successful credential test with the key fully obscured.
+4. `1:35–2:20` — run **Product → Get Many** with a small limit and show only
+   synthetic demo-store output.
+5. `2:20–3:35` — activate one safe Trigger, generate one reversible synthetic
+   event, confirm one delivery, then deactivate it.
+6. `3:35–4:30` — attach the SallaFlow Action to an AI Agent as a tool and run
+   one safe read request.
+7. `4:30–5:00` — show cleanup and the public package/documentation links.
 
 Keep browser tabs, logs, webhook URLs, merchant identifiers, and payloads
 sanitized. Upload or link the video only through the method requested by the
@@ -218,6 +228,9 @@ Before the owner approves final submission, verify:
 - npm 0.6.2 is published from the protected workflow
 - npm shows provenance for that exact package version
 - the registry tarball passed clean-install and compatibility tests
+- the current stable official community-package scanner passes the submitted
+  registry version
+- the limited authenticated demo and cleanup are complete
 - all placeholders in this document have been replaced with evidence
 - screenshots and video contain no secrets or merchant/customer data
 - the applicant is authorized to represent SallaFlow
