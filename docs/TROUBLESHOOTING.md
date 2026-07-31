@@ -152,7 +152,7 @@ dataset. Feedback queries can fan out by selected feedback type.
 ## A saved workflow changed after an upgrade
 
 Back up the workflow, confirm the old and new package versions, and compare the
-node's stored parameters. Version 0.6.2 is intended to preserve Action v5,
+node's stored parameters. Version 0.6.3 preserves Action v5,
 Trigger v2, and the legacy trigger alias. Run the workflow in a non-production
 instance before changing production.
 

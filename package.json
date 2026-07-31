@@ -1,6 +1,6 @@
 {
 	"name": "n8n-nodes-sallaflow",
-	"version": "0.6.2",
+	"version": "0.6.3",
 	"description": "n8n community node for SallaFlow actions and real-time Salla store events",
 	"keywords": [
 		"n8n-community-node-package",
@@ -40,16 +40,18 @@
 		"workflow:check-namespace": "node scripts/migrate-workflow-namespace.mjs --check",
 		"workflow:migrate-namespace": "node scripts/migrate-workflow-namespace.mjs",
 		"check:manifest": "node scripts/check-manifest.mjs",
+		"check:scanner": "node scripts/check-scanner.mjs",
+		"check:scanner:setup": "npm install --ignore-scripts --no-save --package-lock=false @n8n/scan-community-package@0.30.0",
 		"check:source-dist": "node scripts/check-source-dist.mjs",
 		"check:compatibility": "node scripts/check-compatibility.mjs",
 		"check:security": "sh scripts/scan-public-repository.sh",
 		"check:history": "node scripts/scan-git-history.mjs",
 		"pack:dry-run": "npm pack --dry-run",
 		"pack:check": "node scripts/check-pack.mjs",
-		"validate": "npm run lint && npm run test:coverage && npm run build:check && npm run check:manifest && npm run check:compatibility && npm run check:security && npm run check:history && npm run pack:check",
+		"validate": "npm run lint && npm run test:coverage && npm run build:check && npm run check:scanner:setup && npm run check:scanner && npm run check:manifest && npm run check:compatibility && npm run check:security && npm run check:history && npm run pack:check",
 		"release:prepare": "npm run validate",
 		"release": "npm run release:prepare",
-		"prepublishOnly": "n8n-node prerelease && npm run check:source-dist && npm run check:manifest && npm run check:compatibility && npm run check:security && npm run check:history"
+		"prepublishOnly": "n8n-node prerelease && npm run check:source-dist && npm run check:scanner:setup && npm run check:scanner && npm run check:manifest && npm run check:compatibility && npm run check:security && npm run check:history"
 	},
 	"files": [
 		"dist",

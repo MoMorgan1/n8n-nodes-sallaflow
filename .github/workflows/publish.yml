@@ -137,6 +137,9 @@ jobs:
       - name: Build and check source/dist consistency
         run: npm run build:check
 
+      - name: Run pinned n8n scanner checks
+        run: npm run check:scanner:setup && npm run check:scanner
+
       - name: Check package manifest
         run: npm run check:manifest
 

@@ -154,6 +154,8 @@ for (const script of [
 	'workflow:check-namespace',
 	'workflow:migrate-namespace',
 	'check:manifest',
+	'check:scanner',
+	'check:scanner:setup',
 	'check:source-dist',
 	'check:compatibility',
 	'check:security',

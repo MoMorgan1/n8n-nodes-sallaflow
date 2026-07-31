@@ -3,10 +3,29 @@
 All notable public changes to `n8n-nodes-sallaflow` are documented here.
 Versions follow Semantic Versioning.
 
-## [0.6.2] - Unreleased
+## [0.6.3] - 2026-07-31
 
-0.6.2 is the planned public release version. It must remain marked
-**Unreleased** until the exact package is published to npm.
+### Changed
+
+- Alphabetized node display options and corrected metadata capitalization to
+  comply with the current official n8n community-package scanner without
+  changing stored resource, operation, credential, or event values.
+- Declared explicitly that the Action is available as an AI Tool and the
+  Trigger is not.
+- Made Trigger subscription lookup and cleanup failures visible through
+  credential-safe logs while preserving the existing activation and
+  deactivation behavior.
+- Added pinned official-scanner source and compiled-package checks to CI;
+  the official registry scanner remains the post-publication authority.
+
+### Compatibility
+
+- Action type version 5, Trigger type version 2, 11 resources, 46 operations,
+  and 65 selectable Trigger choices are unchanged.
+- Public 0.5.2 workflow and hosted `CUSTOM.*` namespace-migration
+  compatibility are unchanged.
+
+## [0.6.2] - 2026-07-31
 
 ### Added
 
@@ -39,7 +58,7 @@ Versions follow Semantic Versioning.
 
 - The node identifiers remain `sallaFlow` and `sallaFlowTrigger`.
 - The intended compatibility baseline is public npm version 0.5.2.
-- Action v5 and Trigger v2 are preserved for the planned release.
+- Action v5 and Trigger v2 are preserved for the release.
 - Public npm 0.5.2 workflows already use the package-qualified node types and
   require no namespace migration.
 - Workflows exported from a local/custom loader use `CUSTOM.*` node types,
@@ -55,5 +74,6 @@ Versions follow Semantic Versioning.
 Previous public npm release and saved-workflow compatibility baseline. Consult
 the npm registry for its publication metadata.
 
+[0.6.3]: https://github.com/MoMorgan1/n8n-nodes-sallaflow/releases/tag/v0.6.3
 [0.6.2]: https://github.com/MoMorgan1/n8n-nodes-sallaflow/releases/tag/v0.6.2
 [0.5.2]: https://www.npmjs.com/package/n8n-nodes-sallaflow/v/0.5.2
