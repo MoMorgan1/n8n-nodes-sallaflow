@@ -1,6 +1,6 @@
 {
 	"name": "n8n-nodes-sallaflow",
-	"version": "0.6.3",
+	"version": "0.6.4",
 	"description": "n8n community node for SallaFlow actions and real-time Salla store events",
 	"keywords": [
 		"n8n-community-node-package",

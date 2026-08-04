@@ -3,6 +3,18 @@
 All notable public changes to `n8n-nodes-sallaflow` are documented here.
 Versions follow Semantic Versioning.
 
+## [Unreleased]
+
+### Fixed
+
+- Replaced all Arabic text in Action placeholders and descriptions with
+  English-only examples, as required by the n8n verification guidelines.
+
+### Compatibility
+
+- Action type version 5, Trigger type version 2, resource and operation values,
+  request routing, and saved-workflow compatibility are unchanged.
+
 ## [0.6.3] - 2026-07-31
 
 ### Changed
