@@ -36,9 +36,9 @@ function currentContract() {
 }
 
 for (const fixture of [public052, hosted061]) {
-	test(`0.6.3 preserves the node-local contract from ${fixture.channel} ${fixture.packageVersion}`, () => {
+	test(`${packageMetadata.version} preserves the node-local contract from ${fixture.channel} ${fixture.packageVersion}`, () => {
 		const current = currentContract();
-		assert.equal(packageMetadata.version, '0.6.3');
+		assert.equal(packageMetadata.version, '0.6.4');
 		assert.equal(current.action.name, fixture.actionNodeName);
 		assert.equal(current.action.version, fixture.actionTypeVersion);
 		assert.equal(current.trigger.name, fixture.triggerNodeName);

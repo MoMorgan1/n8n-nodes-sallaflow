@@ -202,3 +202,30 @@ test('Trigger manifest locks the public catalogue, aliases, descriptors, and ver
     [...triggers.canonicalEvents, ...Object.keys(triggers.legacyAliases)].sort(),
   );
 });
+
+test('Action and Trigger metadata use English-only UI strings', () => {
+  const arabicScript = /[\u0600-\u06ff]/u;
+
+  function findArabicStrings(value, path = 'description', matches = []) {
+    if (typeof value === 'string' && arabicScript.test(value)) {
+      matches.push(`${path}: ${value}`);
+      return matches;
+    }
+    if (Array.isArray(value)) {
+      value.forEach((entry, index) => findArabicStrings(entry, `${path}[${index}]`, matches));
+      return matches;
+    }
+    if (value && typeof value === 'object') {
+      Object.entries(value).forEach(([key, entry]) => {
+        findArabicStrings(entry, `${path}.${key}`, matches);
+      });
+    }
+    return matches;
+  }
+
+  const matches = [
+    ...findArabicStrings(new SallaFlow().description, 'Action.description'),
+    ...findArabicStrings(new SallaFlowTrigger().description, 'Trigger.description'),
+  ];
+  assert.deepEqual(matches, []);
+});
